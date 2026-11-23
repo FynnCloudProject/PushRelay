@@ -27,21 +27,25 @@ RUN --mount=type=cache,target=/build/.build,id=push-relay-build-${TARGETPLATFORM
     && cp ".build/release/PushRelay" /staging/PushRelay \
     && cp -R ./Resources /staging/Resources
 
-FROM debian:trixie-slim
+FROM ubuntu:24.04
 
 RUN export DEBIAN_FRONTEND=noninteractive \
     && apt-get -q update \
     && apt-get -q install -y --no-install-recommends \
         ca-certificates \
+        libstdc++6 \
+        libxml2 \
         tzdata \
     && rm -rf /var/lib/apt/lists/* \
-    && useradd --user-group --create-home --system --skel /dev/null --home-dir /app vapor
+    && groupadd --gid 1001 vapor \
+    && useradd --uid 1001 --gid 1001 --create-home --system --skel /dev/null --home-dir /app vapor
 
 WORKDIR /app
-COPY --from=build --chown=vapor:vapor /staging /app
+COPY --from=build --chown=1001:1001 /staging /app
 RUN chmod -R a-w ./Resources
 
-USER vapor:vapor
+USER 1001:1001
+RUN ./PushRelay --help >/dev/null
 EXPOSE 8080
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \

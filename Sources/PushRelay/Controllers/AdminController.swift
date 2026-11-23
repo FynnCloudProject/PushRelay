@@ -142,7 +142,7 @@ public struct AdminController: RouteCollection, Sendable {
             snapshot: snapshot
         )
 
-        let view = try await req.view.render("admin-dashboard", context)
+        let view = try await req.view.render("admin-dashboard", context).get()
         return makeHTMLResponse(status: .ok, view: view, cspNonce: nonce)
     }
 
@@ -412,7 +412,7 @@ public struct AdminController: RouteCollection, Sendable {
             csrfToken: csrf,
             errorMessage: errorMessage
         )
-        let view = try await req.view.render("admin-login", context)
+        let view = try await req.view.render("admin-login", context).get()
         return makeHTMLResponse(status: status, view: view, cspNonce: nonce)
     }
 
