@@ -1,6 +1,6 @@
-# fynncloud-push
+# FynnCloud PushRelay
 
-Stateless APNs relay for self-hosted FynnCloud servers.
+Stateless APNs (and FCM) relay for self-hosted FynnCloud servers.
 
 Self-hosted instances cannot bundle Apple APNs `.p8` signing keys, so they POST encrypted notification payloads and File Provider wakeup signals here and this service forwards them to Apple. Nothing is persisted to disk; all rate limits and metrics live in memory.
 
