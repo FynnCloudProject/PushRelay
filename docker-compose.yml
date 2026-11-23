@@ -1,0 +1,16 @@
+services:
+  push-relay:
+    build: .
+    image: ghcr.io/fynncloudproject/push-relay:latest
+    restart: unless-stopped
+    read_only: true
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    volumes:
+      - ./AuthKey.p8:/run/secrets/apns_auth_key.p8:ro
